@@ -293,7 +293,7 @@ def _start():
     threading.Thread(target=keepwarm_loop, daemon=True).start()
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"ok": True, "model": MODEL, "log_url": LOG_URL}
 
