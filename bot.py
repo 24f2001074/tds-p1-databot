@@ -19,6 +19,7 @@ import re
 import threading
 import time
 import traceback
+from dotenv import load_dotenv
 import contextlib
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -26,6 +27,7 @@ from datetime import datetime, timezone
 import requests
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, PlainTextResponse
+load_dotenv()
 
 # ---------------------------------------------------------------- config
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
@@ -33,13 +35,17 @@ AIPIPE_TOKEN = os.environ.get("AIPIPE_TOKEN", "")
 MODEL = os.environ.get("MODEL", "gpt-4o-mini")
 MODEL_BASE_URL = os.environ.get("MODEL_BASE_URL", "https://aipipe.org/openai/v1")
 BASE_URL = os.environ.get("BASE_URL", "http://localhost:8000").rstrip("/")
-LOG_PATH = os.environ.get("LOG_PATH", "/tmp/run.jsonl")
+LOG_PATH = os.environ.get("LOG_PATH", "run.jsonl")
 LOG_URL = f"{BASE_URL}/run.jsonl"
 TG_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
-
+print("BOT TOKEN LOADED:", bool(BOT_TOKEN))
 MAX_AGENT_STEPS = 10
 PY_TIMEOUT = 60  # seconds for one run_python call
 ANSWER_BUDGET = 210  # wall-clock seconds before we force a final answer
+import os
+
+print("Current directory:", os.getcwd())
+print(".env exists:", os.path.exists(".env"))
 
 _log_lock = threading.Lock()
 _histories: dict[int, list[dict]] = {}  # chat_id -> chat-completion messages
